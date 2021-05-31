@@ -1,6 +1,7 @@
 <script>
     import { onMount, afterUpdate, tick } from "svelte";
     import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
+    import UIControls from "../Move-controls.svelte"
 
     let canvas;
     let container;
@@ -30,8 +31,10 @@
     });
 </script>
 
+
 <div class="canvas-container" bind:this={container}>
     <canvas {width} {height} bind:this={canvas} />
+    <UIControls />
 </div>
 
 <style>
