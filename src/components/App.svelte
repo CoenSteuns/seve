@@ -1,5 +1,7 @@
 <script>
-    import Nav from './Nav.svelte';
+    import Nav from "./Nav.svelte";
+    import Content from './Content-container.svelte'
+    import { Router, Route } from "svelte-navigator";
 
     const navData = [
         {
@@ -17,7 +19,12 @@
     ];
 </script>
 
-<main />
-    <Nav title="Seve" data={navData}></Nav>
+<Router>
+    <Nav title="Seve" data={navData} />
+    <Content>
+        <Route path="Mandelbrot"><h1>mandelbrot</h1></Route>
+    </Content>
+    
+</Router>
 <style>
 </style>
