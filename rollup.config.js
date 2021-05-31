@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import glslify from 'rollup-plugin-glslify';;
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -57,7 +58,8 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
-
+        glslify(),
+        
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && serve(),
