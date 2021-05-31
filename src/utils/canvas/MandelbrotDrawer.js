@@ -33,10 +33,19 @@ export default class MandelbrotDrawer{
         } else {
             mat4.scale(matrix, matrix, [1/canvasRatio, 1, 0])
         }
-        console.log(uniformLocations.matrix);
         mat4.scale(matrix, matrix, this.scale)
         mat4.translate(matrix, matrix, this.position)
         gl.uniformMatrix4fv(uniformLocations.matrix, false, matrix)
+    }
+
+    move(translate){
+        this.position[0] += translate[0] / this.scale[0]
+        this.position[1] += translate[1] / this.scale[1]
+    }
+
+    zoom(scaler){
+        this.scale[0] *= scaler;
+        this.scale[1] *= scaler;
     }
 
     draw(){

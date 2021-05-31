@@ -29,12 +29,30 @@
         mandelbrot.resetViewport();
         mandelbrot.draw();
     });
+
+    function move(x, y) {
+        mandelbrot.move([x, y]);
+        mandelbrot.draw();
+    }
+
+    function zoom(amount) {
+        mandelbrot.zoom(amount);
+        mandelbrot.draw();
+    }
+
 </script>
 
 
 <div class="canvas-container" bind:this={container}>
     <canvas {width} {height} bind:this={canvas} />
-    <UIControls />
+    <UIControls 
+        onUp={() => move(0, -0.2)}
+        onDown={() => move(0, 0.2)}
+        onLeft={() => move(0.2, 0)}
+        onRight={() => move(-0.2, 0)}
+        onZoomIn={() => zoom(1.2)}
+        onZoomOut={() => zoom(0.8)}
+    />
 </div>
 
 <style>

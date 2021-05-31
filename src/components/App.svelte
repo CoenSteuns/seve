@@ -23,7 +23,7 @@
 <Router>
     <Nav title="Seve" data={navData} />
     <Content>
-        <Route path="Mandelbrot"><Mandelbrot /></Route>
+        <Route primary={false} path="Mandelbrot"><Mandelbrot /></Route>
     </Content>
 </Router>
 
