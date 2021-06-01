@@ -14,16 +14,17 @@ export default class MandelbrotDrawer{
         this.position = [0.5,0,0];
         this.scale = [1, 1, 0];
 
+        this._drawer.onSetUniformKey(this._setUniformsKey.bind(this))
         this._drawer.onSetUniform(this._setUniforms.bind(this))
     }
 
-
-
-    _setUniforms(gl, program){
-        const uniformLocations = {
+    _setUniformsKey(gl, program){
+        this.uniformLocations = {
             matrix: gl.getUniformLocation(program, `matrix`)
         }
+    }
 
+    _setUniforms(gl, program){
         const matrix = mat4.create();
         
         const canvasRatio = this._canvas.width / this._canvas.height;
@@ -35,12 +36,17 @@ export default class MandelbrotDrawer{
         }
         mat4.scale(matrix, matrix, this.scale)
         mat4.translate(matrix, matrix, this.position)
-        gl.uniformMatrix4fv(uniformLocations.matrix, false, matrix)
+        gl.uniformMatrix4fv(this.uniformLocations.matrix, false, matrix)
     }
 
     move(translate){
         this.position[0] += translate[0] / this.scale[0]
         this.position[1] += translate[1] / this.scale[1]
+    }
+
+    movePixels(translate){
+        this.position[0] += (2/this.scale[0] / this._canvas.width * translate[0]);
+        this.position[1] += (-2/this.scale[0] / this._canvas.height * translate[1]);
     }
 
     zoom(scaler){
@@ -50,6 +56,10 @@ export default class MandelbrotDrawer{
 
     draw(){
         this._drawer.draw();
+    }
+
+    redraw(){
+        this._drawer.redraw();
     }
 
     resetViewport(){

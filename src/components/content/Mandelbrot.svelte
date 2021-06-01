@@ -1,15 +1,22 @@
 <script>
     import { onMount, afterUpdate, tick } from "svelte";
     import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
+    import MoveControls2D from "../../utils/input/MoveControlls2D"
+    import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls"
     import UIControls from "../Move-controls.svelte"
 
     let canvas;
     let container;
 
+    const zoomspeed = 0.2;
+
     let width = 500;
     let height = 500;
 
     let mandelbrot = null;
+
+    let mover;
+    let zoomer;
 
     function resizeCanvas() {
         width = container.offsetWidth;
@@ -28,6 +35,15 @@
         await tick();
         mandelbrot.resetViewport();
         mandelbrot.draw();
+        mover = new MoveControls2D(canvas);
+        zoomer = new ZoomInputcontrolls(canvas);
+        mover.onMove((x, y) => {
+            mandelbrot.movePixels([x, y])
+            mandelbrot.redraw();
+        })
+        zoomer.onZoom((y) => {
+            zoom(1 - zoomspeed * y)
+        })
     });
 
     function move(x, y) {

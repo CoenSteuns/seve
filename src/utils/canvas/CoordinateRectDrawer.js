@@ -58,6 +58,10 @@ export default class CoordinateRectDrawer {
         this.onUniform = callback
     }
 
+    onSetUniformKey(callback){
+        this.onUniformKey = callback
+    }
+
     draw(){
         const {gl, _fragmentShader, _vertexShader, _positionBuffer} = this;
         const program = gl.createProgram();
@@ -71,14 +75,22 @@ export default class CoordinateRectDrawer {
         gl.vertexAttribPointer(positionLocation, 3, gl.FLOAT, false, 0, 0);
 
         gl.useProgram(program);
+        this.program = program;
+        if(this.onUniformKey)
+            this.onUniformKey(gl, program);
 
         if(this.onUniform)
-            this.onUniform(gl, program)
+            this.onUniform(gl, program);    
         
         gl.drawArrays(gl.TRIANGLES, 0, this._vertexData.length/3);
+    }
 
-        
-        
+    redraw(){
+
+        if(this.onUniform)
+            this.onUniform(this.gl, this.program); 
+
+        this.gl.drawArrays(this.gl.TRIANGLES, 0, this._vertexData.length/3);
     }
 
     resetViewport = () =>{

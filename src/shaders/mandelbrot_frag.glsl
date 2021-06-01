@@ -7,7 +7,7 @@ bool isInMandlebrot(float real, float imag){
     float currentReal = real;
     float currentImag = imag;
 
-    for(int i=0;i<80;++i)
+    for(int i=0;i<200;++i)//precision
     {
         float firsts = currentReal * currentReal;
         float outer = currentReal * currentImag;
