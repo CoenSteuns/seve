@@ -1,5 +1,5 @@
 <script>
-    import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
+    import JuliaDrawer from "../../utils/canvas/JuliaDrawer";
     import MoveControls2D from "../../utils/input/MoveControlls2D";
     import UIControls from "../Move-controls.svelte"
     import SetRenderer from "./SetRenderer.svelte";
@@ -8,7 +8,7 @@
     let mover;
     let zoomer;
 
-    let mandelbrot;
+    let julia;
 
     const zoomspeed = 0.2;
 
@@ -22,23 +22,23 @@
         zoomer.onZoom((y) => {
             zoom(1 - zoomspeed * y)
         })
-        mandelbrot = drawer;
+        julia = drawer;
     }
 
     function move(x, y) {
-        mandelbrot.move([x, y]);
-        mandelbrot.redraw();
+        julia.move([x, y]);
+        julia.redraw();
     }
 
     function zoom(amount) {
-        mandelbrot.zoom(amount);
-        mandelbrot.redraw();
+        julia.zoom(amount);
+        julia.redraw();
     }
 
 </script>
 
 <div>
-    <SetRenderer DrawerType={MandelbrotDrawer} onDrawerCreated={initializeSet}/>
+    <SetRenderer DrawerType={JuliaDrawer} onDrawerCreated={initializeSet}/>
     <UIControls 
         onUp={() => move(0, -0.2)}
         onDown={() => move(0, 0.2)}
