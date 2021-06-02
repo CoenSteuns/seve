@@ -34,7 +34,7 @@ export default class CoordinateRectDrawer {
 
     }
 
-    _createVertices(maxX, minX, maxY, minY) {
+    _createVertices(maxX: number, minX: number, maxY: number, minY: number) {
         this._vertices = {
             topLeft: [minX, maxY, 0],
             topRight: [maxX, maxY, 0],

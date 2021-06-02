@@ -9,8 +9,6 @@ const MATRIX_UNIFORM_KEY: string = "matrix"
 
 export default class MandelbrotDrawer implements IControlableDrawing{
 
-
-
     private _canvas: HTMLCanvasElement;
     private _drawer: CoordinateRectDrawer;
 

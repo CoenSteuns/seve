@@ -5,53 +5,56 @@
     import SetRenderer from "./SetRenderer.svelte";
     import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls";
     import MandelbrotControls from "../controls/Mandelbrot-controls.svelte";
+import Vector2 from "../../utils/math/Vector2";
+import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
 
-    let mover;
-    let zoomer;
+    let mover: MoveControls2D;
+    let zoomer: ZoomInputcontrolls;
 
-    let julia;
+    let julia: JuliaDrawer;
 
     const zoomspeed = 0.2;
 
-    function initializeSet(drawer, elem) {
+    function createDrawer(elem: HTMLCanvasElement): IControlableDrawing {
+        julia = new JuliaDrawer(elem);
+        return julia;
+    }
+
+    function initializeSet(drawer: IControlableDrawing, elem: HTMLCanvasElement): void {
         mover = new MoveControls2D(elem);
         zoomer = new ZoomInputcontrolls(elem);
-        mover.onMove((x, y) => {
-            drawer.movePixels([x, y]);
-            drawer.redraw();
-        });
+        mover.onMove(move);
         zoomer.onZoom((y) => {
             zoom(1 - zoomspeed * y);
         });
-        julia = drawer;
     }
 
-    function move(x, y) {
-        julia.move([x, y]);
-        julia.redraw();
+    function move(x: number, y: number) {
+        julia.move(new Vector2(x, y));
+        julia.draw();
     }
 
-    function zoom(amount) {
+    function zoom(amount: number) {
         julia.zoom(amount);
-        julia.redraw();
+        julia.draw();
     }
 
-    function selectConstant(e) {
-        let clickPosition = {x: e.offsetX, y: e.offsetY}
-        let x = 2 / 300 * clickPosition.x - 1.5;//.5 for the .5 position offset in the mandelbrot drawer
-        let y = -2 / 300 * clickPosition.y + 1;
-        julia.setConst(x, y);
-        julia.redraw();
+    function selectConstant(x: number, y: number) {
+        let translatedX = 2 / 300 * x - 1.5;//.5 for the .5 position offset in the mandelbrot drawer
+        let translatedY = -2 / 300 * y + 1;
+        
+        julia.setConst(translatedX, translatedY);
+        julia.draw();
     }
 </script>
 
 <div>
-    <SetRenderer DrawerType={JuliaDrawer} onDrawerCreated={initializeSet} />
+    <SetRenderer DrawerFactory={createDrawer} onDrawerCreated={initializeSet} />
     <UIControls
-        onUp={() => move(0, -0.2)}
-        onDown={() => move(0, 0.2)}
-        onLeft={() => move(0.2, 0)}
-        onRight={() => move(-0.2, 0)}
+        onUp={() => move(0, 50)}
+        onDown={() => move(0, -50)}
+        onLeft={() => move(50, 0)}
+        onRight={() => move(-50, 0)}
         onZoomIn={() => zoom(1.2)}
         onZoomOut={() => zoom(0.8)}
     />
