@@ -15,18 +15,14 @@
     let mandelbrot: MandelbrotDrawer;
 
     function createMandelbrotDrawer(canvas: HTMLCanvasElement): IControlableDrawing {
-        mandelbrot = new MandelbrotDrawer(canvas);
-        
-        return mandelbrot;
-    }
-
-    function initializeSet(drawer: IControlableDrawing, elem: HTMLElement) {
-        mover = new MoveControls2D(elem);
-        zoomer = new ZoomInputcontrolls(elem);
+        mover = new MoveControls2D(canvas);
+        zoomer = new ZoomInputcontrolls(canvas);
         mover.onMove(move)
         zoomer.onZoom((y) => zoom(1 - ZOOM_SPEED * y))
-    }
 
+        mandelbrot = new MandelbrotDrawer(canvas);
+        return mandelbrot;
+    }
     
 
     function move(x: number, y: number): void {
@@ -43,8 +39,7 @@
 
 <div>
     <SetRenderer
-        DrawerFactory={createMandelbrotDrawer}
-        onDrawerCreated={initializeSet}
+        drawerFactory={createMandelbrotDrawer}
     />
     <UIControls
         onUp={() => move(0, 50)}

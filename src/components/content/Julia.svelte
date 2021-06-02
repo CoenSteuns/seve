@@ -16,20 +16,17 @@ import type { IControlableDrawing } from "../../utils/canvas/interface/IControla
     const zoomspeed = 0.2;
 
     function createDrawer(elem: HTMLCanvasElement): IControlableDrawing {
+        mover = new MoveControls2D(elem);
+        zoomer = new ZoomInputcontrolls(elem);
+        mover.onMove(move);
+        zoomer.onZoom((y) => zoom(1 - zoomspeed * y));
+
         julia = new JuliaDrawer(elem);
         return julia;
     }
 
-    function initializeSet(drawer: IControlableDrawing, elem: HTMLCanvasElement): void {
-        mover = new MoveControls2D(elem);
-        zoomer = new ZoomInputcontrolls(elem);
-        mover.onMove(move);
-        zoomer.onZoom((y) => {
-            zoom(1 - zoomspeed * y);
-        });
-    }
 
-    function move(x: number, y: number) {
+    function move(x: number, y: number): void {
         julia.move(new Vector2(x, y));
         julia.draw();
     }
@@ -39,7 +36,7 @@ import type { IControlableDrawing } from "../../utils/canvas/interface/IControla
         julia.draw();
     }
 
-    function selectConstant(x: number, y: number) {
+    function selectConstant(x: number, y: number): void {
         let translatedX = 2 / 300 * x - 1.5;//.5 for the .5 position offset in the mandelbrot drawer
         let translatedY = -2 / 300 * y + 1;
         
@@ -49,7 +46,7 @@ import type { IControlableDrawing } from "../../utils/canvas/interface/IControla
 </script>
 
 <div>
-    <SetRenderer DrawerFactory={createDrawer} onDrawerCreated={initializeSet} />
+    <SetRenderer drawerFactory={createDrawer} />
     <UIControls
         onUp={() => move(0, 50)}
         onDown={() => move(0, -50)}

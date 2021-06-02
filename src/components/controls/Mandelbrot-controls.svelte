@@ -7,7 +7,6 @@
     export let onPositionSelected: (x: number, y: number) => void;
 
     function onClickers(e: MouseEvent) : void{
-        
         onPositionSelected(e.offsetX, e.offsetY)
     }
 
@@ -17,7 +16,7 @@
 </script>
 
 <div>
-    <SetRenderer DrawerFactory={createMandelbrotDrawer} onDrawerCreated={() => {}} onClick={onClickers} />
+    <SetRenderer drawerFactory={createMandelbrotDrawer} onClick={onClickers} />
 </div>
 
 <style>
