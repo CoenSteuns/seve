@@ -4,7 +4,7 @@ export default class CoordinateRectDrawer {
         this.gl = canvas.getContext('webgl')
         const gl = this.gl;
         
-
+        
 
         this._createVertices(maxX, minX, maxY, minY);
         this._createVertexData();
@@ -30,6 +30,7 @@ export default class CoordinateRectDrawer {
 
     _createVertexData() {
         const {topLeft, topRight, bottomRight, bottomLeft} = this._vertices;
+        
         this._vertexData = [
             ...topLeft,
             ...topRight,

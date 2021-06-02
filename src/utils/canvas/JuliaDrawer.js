@@ -1,18 +1,19 @@
-import fragShader from '../../shaders/mandelbrot_frag.glsl'
-import vertShader from '../../shaders/rect_vertex.glsl'
+import fragShader from '../../shaders/julia_frag.glsl'
+import vertShader from '../../shaders/rect_julia_vert.glsl'
 import CoordinateRectDrawer from './CoordinateRectDrawer'
-import {mat4} from '../../lib/gl-matrix-min';
+import {mat4, vec2} from '../../lib/gl-matrix-min';
 
-export default class MandelbrotDrawer{
+export default class JuliaDrawer{
 
     constructor(canvas){
         this._canvas = canvas;
-        this._drawer = new CoordinateRectDrawer(canvas, 1, -2, 1, -1);
+        this._drawer = new CoordinateRectDrawer(canvas, 2, -2, 2, -2);
         this._drawer.setFragmentShader(fragShader);
         this._drawer.setVertexShader(vertShader);
         
-        this.position = [0.5,0,0];
-        this.scale = [1, 1, 0];
+        this.position = [0,0,0];
+        this.scale = [0.8, 0.8, 0];
+        this.constNum = [0, 0];
 
         this._drawer.onSetUniformKey(this._setUniformsKey.bind(this))
         this._drawer.onSetUniform(this._setUniforms.bind(this))
@@ -21,12 +22,13 @@ export default class MandelbrotDrawer{
     _setUniformsKey(gl, program){
         this.uniformLocations = {
             matrix: gl.getUniformLocation(program, `matrix`),
-            real: gl.getUniformLocation(program, `real`),
-            imag: gl.getUniformLocation(program, `imag`),
+            const: gl.getUniformLocation(program, `constNum`),
         }
     }
 
     _setUniforms(gl, program){
+        gl.uniform2fv(this.uniformLocations.const, this.constNum)
+        
         const matrix = mat4.create();
         
         const canvasRatio = this._canvas.width / this._canvas.height;
@@ -38,6 +40,7 @@ export default class MandelbrotDrawer{
         }
         mat4.scale(matrix, matrix, this.scale)
         mat4.translate(matrix, matrix, this.position)
+
         gl.uniformMatrix4fv(this.uniformLocations.matrix, false, matrix)
     }
 
@@ -48,7 +51,12 @@ export default class MandelbrotDrawer{
 
     movePixels(translate){
         this.position[0] += (2/this.scale[0] / this._canvas.width * translate[0]);
-        this.position[1] += (-2/this.scale[0] / this._canvas.height * translate[1]);
+        this.position[1] += (-2/this.scale[1] / this._canvas.height * translate[1]);
+    }
+
+    setConst(x, y){
+        this.constNum[0] = x;
+        this.constNum[1] = y;
     }
 
     zoom(scaler){
