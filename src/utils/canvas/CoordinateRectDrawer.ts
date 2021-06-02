@@ -4,7 +4,7 @@ export default class CoordinateRectDrawer {
         this.gl = canvas.getContext('webgl')
         const gl = this.gl;
         
-        
+        this.isRedraw = false;
 
         this._createVertices(maxX, minX, maxY, minY);
         this._createVertexData();
@@ -64,6 +64,15 @@ export default class CoordinateRectDrawer {
     }
 
     draw(){
+
+        if(this.isRedraw){
+            this.redraw();
+            return
+        }
+
+        
+        this.isRedraw = true;
+
         const {gl, _fragmentShader, _vertexShader, _positionBuffer} = this;
         const program = gl.createProgram();
         gl.attachShader(program, _vertexShader);
@@ -77,8 +86,9 @@ export default class CoordinateRectDrawer {
 
         gl.useProgram(program);
         this.program = program;
-        if(this.onUniformKey)
+        if(this.onUniformKey){
             this.onUniformKey(gl, program);
+        }
 
         if(this.onUniform)
             this.onUniform(gl, program);    
@@ -87,7 +97,6 @@ export default class CoordinateRectDrawer {
     }
 
     redraw(){
-
         if(this.onUniform)
             this.onUniform(this.gl, this.program); 
 
@@ -95,7 +104,7 @@ export default class CoordinateRectDrawer {
     }
 
     resetViewport = () =>{
-        
+        this.isRedraw = false;
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
     }
 

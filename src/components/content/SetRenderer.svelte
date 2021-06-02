@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { onMount, afterUpdate, tick } from "svelte";
 
     export let DrawerType;

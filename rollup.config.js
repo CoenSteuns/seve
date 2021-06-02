@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import glsl from 'rollup-plugin-glsl';
 import glslify from 'rollup-plugin-glslify';
 import autoPreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
@@ -60,9 +61,17 @@ export default {
 			browser: true,
 			dedupe: ['svelte']
 		}),
-        typescript({sourceMap: !production}),
+        glsl({
+            include: './src/shaders/**/*.glsl',
+            sourceMap: true,
+            compress: production
+          }),
+        typescript({
+            sourceMap: !production,
+            typescript: require('typescript'),
+        }),
 		commonjs(),
-        glslify(),
+        
         
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
