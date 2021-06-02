@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import JuliaDrawer from "../../utils/canvas/JuliaDrawer";
     import MoveControls2D from "../../utils/input/MoveControlls2D";
     import UIControls from "../Move-controls.svelte";

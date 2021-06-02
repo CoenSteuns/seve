@@ -1,18 +1,18 @@
-<script>
+<script lang="ts">
     import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
     import MoveControls2D from "../../utils/input/MoveControlls2D";
     import UIControls from "../Move-controls.svelte"
     import SetRenderer from "./SetRenderer.svelte";
     import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls"
 
-    let mover;
-    let zoomer;
+    const ZOOM_SPEED: number = 0.2;
+
+    let mover: MoveControls2D | null = null;
+    let zoomer: ZoomInputcontrolls | null = null;
 
     let mandelbrot;
 
-    const zoomspeed = 0.2;
-
-    function initializeSet(drawer, elem) {
+    function initializeSet(drawer, elem: HTMLElement) {
         mover = new MoveControls2D(elem);
         zoomer = new ZoomInputcontrolls(elem);
         mover.onMove((x, y) => {
@@ -20,7 +20,7 @@
             drawer.redraw();
         })
         zoomer.onZoom((y) => {
-            zoom(1 - zoomspeed * y)
+            zoom(1 - ZOOM_SPEED * y)
         })
         mandelbrot = drawer;
     }
