@@ -29,12 +29,12 @@
 
     
 
-    function move(x: number, y: number) {
+    function move(x: number, y: number): void {
         mandelbrot.move(new Vector2(x, y));
         mandelbrot.draw();
     }
 
-    function zoom(amount: number) {
+    function zoom(amount: number): void {
         mandelbrot.zoom(amount);
         mandelbrot.draw();
     }

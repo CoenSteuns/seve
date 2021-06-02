@@ -15,7 +15,6 @@
         new NavLink("Julias Set", "Julia")
     );
 
-
     navData.push(fractals2D);
 </script>
 
