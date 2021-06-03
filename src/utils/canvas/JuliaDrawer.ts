@@ -1,9 +1,10 @@
 import fragShader from '../../shaders/julia_frag.glsl'
 import vertShader from '../../shaders/rect_julia_vert.glsl'
-import CoordinateRectDrawer from './CoordinateRectDrawer'
-import {mat4} from 'gl-matrix';
+import CoordinateRectDrawer from './CoordinateRectDrawer';
 import Vector2 from '../math/Vector2';
 import type { IControlableDrawing } from './interface/IControlableDrawing';
+import Matrix4 from '../math/Matrix4';
+import RatioScaler from '../scaling/RatioScaler';
 
 const MATRIX_UNIFORM_KEY = "matrix"
 const CONST_NUM_UNIFORM_KEY = "constNum"
@@ -43,19 +44,12 @@ export default class JuliaDrawer implements IControlableDrawing{
     _setUniforms(gl: WebGLRenderingContext): void{              
         gl.uniform2fv(this._uniformLocations[CONST_NUM_UNIFORM_KEY], this._constNum)
         
-        const matrix: mat4 = mat4.create();
-
-        const canvasRatio = this._canvas.width / this._canvas.height;
-        
-        if(canvasRatio < 1){
-            mat4.scale(matrix, matrix, [1, 1*canvasRatio, 0])
-        } else {
-            mat4.scale(matrix, matrix, [1/canvasRatio, 1, 0])
-        }
-        mat4.scale(matrix, matrix, this._scale.toGlVec3(1))
-        mat4.translate(matrix, matrix, this._position.toGlVec3())
-
-        gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY], false, matrix)
+        const matrix = new Matrix4();
+        const canvasScale = new RatioScaler(this._canvas.width, this._canvas.height).getVector2Scaler();
+        matrix.scale(canvasScale.toGlVec3());
+        matrix.scale(this._scale.toGlVec3());
+        matrix.translate(this._position.toGlVec3())
+        gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY], false, matrix.getGLmatrix())
     }
 
     move(translate: Vector2): void{        
