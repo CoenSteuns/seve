@@ -40,9 +40,7 @@ export default class JuliaDrawer implements IControlableDrawing{
         }
     }
 
-    _setUniforms(gl: WebGLRenderingContext): void{
-        console.log(this._uniformLocations[CONST_NUM_UNIFORM_KEY]);
-              
+    _setUniforms(gl: WebGLRenderingContext): void{              
         gl.uniform2fv(this._uniformLocations[CONST_NUM_UNIFORM_KEY], this._constNum)
         
         const matrix: mat4 = mat4.create();
@@ -54,8 +52,8 @@ export default class JuliaDrawer implements IControlableDrawing{
         } else {
             mat4.scale(matrix, matrix, [1/canvasRatio, 1, 0])
         }
-        mat4.scale(matrix, matrix, this._scale.toFloatArray(1))
-        mat4.translate(matrix, matrix, this._position.toFloatArray(1))
+        mat4.scale(matrix, matrix, this._scale.toGlVec3(1))
+        mat4.translate(matrix, matrix, this._position.toGlVec3())
 
         gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY], false, matrix)
     }
@@ -65,7 +63,7 @@ export default class JuliaDrawer implements IControlableDrawing{
             (2/this._scale.x / this._canvas.width * translate.x),
             (-2/this._scale.y / this._canvas.height * translate.y)
         );
-        this._position = this._position.add(movement);        
+        this._position.add(movement);        
     }
 
     setConst(x: number, y: number): void{
@@ -74,7 +72,7 @@ export default class JuliaDrawer implements IControlableDrawing{
     }
 
     zoom(scaler:number): void{
-        this._scale = this._scale.scale(scaler);
+        this._scale.scale(scaler);
     }
 
     draw(): void{

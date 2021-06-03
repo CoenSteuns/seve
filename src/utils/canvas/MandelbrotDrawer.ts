@@ -1,9 +1,10 @@
 import fragShader from '../../shaders/mandelbrot_frag.glsl'
 import vertShader from '../../shaders/rect_vertex.glsl'
 import CoordinateRectDrawer from './CoordinateRectDrawer'
-import {mat4} from 'gl-matrix';
 import type { IControlableDrawing } from './interface/IControlableDrawing';
 import Vector2 from '../math/Vector2';
+import Matrix4 from '../math/Matrix4';
+import RatioScaler from '../scaling/RatioScaler';
 
 const MATRIX_UNIFORM_KEY = "matrix"
 
@@ -37,19 +38,12 @@ export default class MandelbrotDrawer implements IControlableDrawing{
     }
 
     private setUniforms(gl: WebGLRenderingContext){
-        const matrix = mat4.create();
-        
-        const canvasRatio = this._canvas.width / this._canvas.height;
-        
-        if(canvasRatio < 1){
-            mat4.scale(matrix, matrix, [1, 1*canvasRatio, 0])
-        } else {
-            mat4.scale(matrix, matrix, [1/canvasRatio, 1, 0])
-        }
-        mat4.scale(matrix, matrix, this._scale.toFloatArray(1))
-        mat4.translate(matrix, matrix, this._position.toFloatArray(1))
-        
-        gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY] , false, matrix)
+        const matrix = new Matrix4()
+        const canvasScale = new RatioScaler(this._canvas.width, this._canvas.height).getVector2Scaler();
+        matrix.scale(canvasScale.toGlVec3());
+        matrix.scale(this._scale.toGlVec3(1));
+        matrix.translate(this._position.toGlVec3(0))
+        gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY] , false, matrix.getGLmatrix())
     }
 
     move(translate: Vector2): void{
@@ -57,11 +51,11 @@ export default class MandelbrotDrawer implements IControlableDrawing{
             (2/this._scale.x / this._canvas.width * translate.x),
             (-2/this._scale.y / this._canvas.height * translate.y)
         );
-        this._position = this._position.add(movement);
+        this._position.add(movement);
     }
 
     zoom(scaler: number): void{
-        this._scale = this._scale.scale(scaler);
+        this._scale.scale(scaler);
     }
 
     draw(): void{

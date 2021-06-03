@@ -5,8 +5,8 @@
     import SetRenderer from "./SetRenderer.svelte";
     import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls";
     import MandelbrotControls from "../controls/Mandelbrot-controls.svelte";
-import Vector2 from "../../utils/math/Vector2";
-import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
+    import Vector2 from "../../utils/math/Vector2";
+    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
 
     let mover: MoveControls2D;
     let zoomer: ZoomInputcontrolls;
