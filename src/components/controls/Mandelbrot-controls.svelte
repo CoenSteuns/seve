@@ -1,16 +1,22 @@
-<script>
+<script lang="ts">
+    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
+
     import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
     import SetRenderer from "../content/SetRenderer.svelte";
 
-    export let onPositionSelected;
+    export let onPositionSelected: (x: number, y: number) => void;
 
-    function onClickers(e) {
-        onPositionSelected(e)
+    function onClickers(e: MouseEvent) : void{
+        onPositionSelected(e.offsetX, e.offsetY)
+    }
+
+    function createMandelbrotDrawer(canvas: HTMLCanvasElement): IControlableDrawing {
+        return new MandelbrotDrawer(canvas);
     }
 </script>
 
 <div>
-    <SetRenderer DrawerType={MandelbrotDrawer} onDrawerCreated={() => {}} onClick={onClickers} />
+    <SetRenderer drawerFactory={createMandelbrotDrawer} onClick={onClickers} />
 </div>
 
 <style>

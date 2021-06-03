@@ -1,11 +1,11 @@
-<script>
-    export let onUp;
-    export let onDown;
-    export let onLeft;
-    export let onRight;
+<script lang="ts">
+    export let onUp: () => void;
+    export let onDown: () => void;
+    export let onLeft: () => void;
+    export let onRight: () => void;
 
-    export let onZoomIn;
-    export let onZoomOut;
+    export let onZoomIn: () => void;
+    export let onZoomOut: () => void;
 </script>
 <div class="container">
     <div class="movement-container">

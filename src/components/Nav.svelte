@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
     import { Link } from "svelte-navigator";
-    export let title;
-    export let data;
+    import type NavSubject from "../utils/nav-data/Nav-subject";
+    export let title: string;
+    export let data: NavSubject[];
 </script>
 
 <nav class="nav-sidebar">

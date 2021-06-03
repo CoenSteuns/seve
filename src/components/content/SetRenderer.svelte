@@ -1,19 +1,19 @@
-<script>
+<script lang="ts">
     import { onMount, afterUpdate, tick } from "svelte";
+    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
 
-    export let DrawerType;
-    export let onDrawerCreated;
+    export let drawerFactory: (canvas: HTMLCanvasElement) => IControlableDrawing;
 
-    export let onClick = () => {};
+    export let onClick: (e: MouseEvent) => void | null = null;
 
-    let canvas;
+    let canvas: HTMLCanvasElement;
 
     let width = 500;
     let height = 500;
 
-    let drawer = null;
+    let drawer: IControlableDrawing = null;
 
-    function resizeCanvas() {
+    function resizeCanvas(): void{
         width = canvas.offsetWidth;
         height = canvas.offsetHeight;
     }
@@ -24,14 +24,15 @@
         drawer.draw();
     });
 
-    onMount(async () => {
-        drawer = new DrawerType(canvas);
+    onMount(async () => {        
+        drawer = drawerFactory(canvas);
+        
         resizeCanvas();
         await tick();
-        onDrawerCreated(drawer, canvas);
         drawer.resetViewport();
         drawer.draw();
-        canvas.addEventListener('click', onClick);
+        if(onClick)
+            canvas.addEventListener('click', onClick);
     });
 </script>
 

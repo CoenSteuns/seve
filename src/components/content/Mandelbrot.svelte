@@ -1,56 +1,58 @@
-<script>
+<script lang="ts">
     import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
     import MoveControls2D from "../../utils/input/MoveControlls2D";
     import UIControls from "../Move-controls.svelte"
     import SetRenderer from "./SetRenderer.svelte";
     import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls"
+    import Vector2 from "../../utils/math/Vector2";
+    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
 
-    let mover;
-    let zoomer;
+    const ZOOM_SPEED = 0.2;
 
-    let mandelbrot;
+    let mover: MoveControls2D | null = null;
+    let zoomer: ZoomInputcontrolls | null = null;
 
-    const zoomspeed = 0.2;
+    let mandelbrot: MandelbrotDrawer;
 
-    function initializeSet(drawer, elem) {
-        mover = new MoveControls2D(elem);
-        zoomer = new ZoomInputcontrolls(elem);
-        mover.onMove((x, y) => {
-            drawer.movePixels([x, y])
-            drawer.redraw();
-        })
-        zoomer.onZoom((y) => {
-            zoom(1 - zoomspeed * y)
-        })
-        mandelbrot = drawer;
+    function createMandelbrotDrawer(canvas: HTMLCanvasElement): IControlableDrawing {
+        mover = new MoveControls2D(canvas);
+        zoomer = new ZoomInputcontrolls(canvas);
+        mover.onMove(move)
+        zoomer.onZoom((y) => zoom(1 - ZOOM_SPEED * y))
+
+        mandelbrot = new MandelbrotDrawer(canvas);
+        return mandelbrot;
+    }
+    
+
+    function move(x: number, y: number): void {
+        mandelbrot.move(new Vector2(x, y));
+        mandelbrot.draw();
     }
 
-    function move(x, y) {
-        mandelbrot.move([x, y]);
-        mandelbrot.redraw();
-    }
-
-    function zoom(amount) {
+    function zoom(amount: number): void {
         mandelbrot.zoom(amount);
-        mandelbrot.redraw();
+        mandelbrot.draw();
     }
 
 </script>
 
 <div>
-    <SetRenderer DrawerType={MandelbrotDrawer} onDrawerCreated={initializeSet}/>
-    <UIControls 
-        onUp={() => move(0, -0.2)}
-        onDown={() => move(0, 0.2)}
-        onLeft={() => move(0.2, 0)}
-        onRight={() => move(-0.2, 0)}
+    <SetRenderer
+        drawerFactory={createMandelbrotDrawer}
+    />
+    <UIControls
+        onUp={() => move(0, 50)}
+        onDown={() => move(0, -50)}
+        onLeft={() => move(50, 0)}
+        onRight={() => move(-50, 0)}
         onZoomIn={() => zoom(1.2)}
         onZoomOut={() => zoom(0.8)}
     />
 </div>
 
 <style>
-    div{
+    div {
         position: absolute;
         left: 0;
         right: 0;

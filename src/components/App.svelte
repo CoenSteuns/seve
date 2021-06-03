@@ -1,24 +1,21 @@
-<script>
+<script lang="ts">
     import Nav from "./Nav.svelte";
     import Content from "./Content-container.svelte";
     import { Router, Route } from "svelte-navigator";
     import Mandelbrot from "./content/Mandelbrot.svelte";
     import Julia from "./content/Julia.svelte";
+    import NavSubject from "../utils/nav-data/Nav-subject";
+    import NavLink from "../utils/nav-data/Nav-link";
 
-    const navData = [
-        {
-            title: "2D Fractals",
-            links: [
-                { title: "Mandlebrot set", url: "Mandelbrot" },
-                { title: "Julia set", url: "Julia" },
-                // { title: "Tree", url: "Tree" },
-            ],
-        },
-        // {
-        //     title: "Path Finding Algorithms",
-        //     links: [{ title: "A Star", url: "Astar" }],
-        // },
-    ];
+    const navData: NavSubject[] = []; 
+    
+    const fractals2D: NavSubject = new NavSubject('2D Fractals');
+    fractals2D.addLinks(
+        new NavLink("Mandelbrot Set", "Mandelbrot"),
+        new NavLink("Julias Set", "Julia")
+    );
+
+    navData.push(fractals2D);
 </script>
 
 <Router>
