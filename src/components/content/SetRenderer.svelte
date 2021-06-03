@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount, afterUpdate, tick } from "svelte";
+    import { onMount, afterUpdate, tick, onDestroy } from "svelte";
     import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
 
     export let drawerFactory: (canvas: HTMLCanvasElement) => IControlableDrawing;
@@ -34,6 +34,10 @@
         if(onClick)
             canvas.addEventListener('click', onClick);
     });
+
+    onDestroy(() => {
+        drawer.removeContext();
+    })
 </script>
 
 <canvas {width} {height} bind:this={canvas} />

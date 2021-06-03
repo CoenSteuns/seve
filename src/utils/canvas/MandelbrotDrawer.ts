@@ -31,6 +31,10 @@ export default class MandelbrotDrawer implements IControlableDrawing{
         this._drawer.onSetUniform(this.setUniforms.bind(this))
     }
 
+    public removeContext(): void {
+        this._drawer.removeContext();
+    }
+
     private setUniformsKey(gl: WebGLRenderingContext, program: WebGLProgram){
         this._uniformLocations = {
             [MATRIX_UNIFORM_KEY]: gl.getUniformLocation(program, MATRIX_UNIFORM_KEY)

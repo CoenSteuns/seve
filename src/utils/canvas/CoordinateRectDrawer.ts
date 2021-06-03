@@ -34,6 +34,14 @@ export default class CoordinateRectDrawer {
 
     }
 
+    public removeContext(): void {
+        if (this._gl) {
+            const extension: WEBGL_lose_context = this._gl.getExtension('WEBGL_lose_context')
+            if (extension) 
+                extension.loseContext()
+          }
+    }
+
     _createVertices(maxX: number, minX: number, maxY: number, minY: number): void {
         this._vertices = {
             topLeft: [minX, maxY, 0],

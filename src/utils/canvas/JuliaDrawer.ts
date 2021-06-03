@@ -34,6 +34,10 @@ export default class JuliaDrawer implements IControlableDrawing{
         this._drawer.onSetUniform(this._setUniforms.bind(this))
     }
 
+    public removeContext(): void {
+        this._drawer.removeContext();
+    }
+
     _setUniformsKey(gl: WebGLRenderingContext, program: WebGLProgram): void{
         this._uniformLocations = {
             [MATRIX_UNIFORM_KEY]: gl.getUniformLocation(program, MATRIX_UNIFORM_KEY),
