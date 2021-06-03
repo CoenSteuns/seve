@@ -25,4 +25,14 @@ export default class Vector2{
         return [this.x, this.y];
     }
 
+    public toFloatArray(extraSize = 0): Float32Array {
+        const array = [this.x, this.y];
+        for (let i = 0; i < extraSize; i++) {
+            array.push(0);
+        }
+        return new Float32Array(array);
+
+    }
+
+    
 }

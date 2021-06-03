@@ -1,12 +1,12 @@
 import fragShader from '../../shaders/julia_frag.glsl'
 import vertShader from '../../shaders/rect_julia_vert.glsl'
 import CoordinateRectDrawer from './CoordinateRectDrawer'
-import {mat4, vec2} from '../../lib/gl-matrix-min';
+import {mat4} from 'gl-matrix';
 import Vector2 from '../math/Vector2';
 import type { IControlableDrawing } from './interface/IControlableDrawing';
 
-const MATRIX_UNIFORM_KEY: string = "matrix"
-const CONST_NUM_UNIFORM_KEY: string = "constNum"
+const MATRIX_UNIFORM_KEY = "matrix"
+const CONST_NUM_UNIFORM_KEY = "constNum"
 
 export default class JuliaDrawer implements IControlableDrawing{
 
@@ -33,20 +33,20 @@ export default class JuliaDrawer implements IControlableDrawing{
         this._drawer.onSetUniform(this._setUniforms.bind(this))
     }
 
-    _setUniformsKey(gl: WebGLRenderingContext, program: WebGLProgram){
+    _setUniformsKey(gl: WebGLRenderingContext, program: WebGLProgram): void{
         this._uniformLocations = {
             [MATRIX_UNIFORM_KEY]: gl.getUniformLocation(program, MATRIX_UNIFORM_KEY),
             [CONST_NUM_UNIFORM_KEY]: gl.getUniformLocation(program, CONST_NUM_UNIFORM_KEY),
         }
     }
 
-    _setUniforms(gl: WebGLRenderingContext, program: WebGLProgram){
+    _setUniforms(gl: WebGLRenderingContext): void{
         console.log(this._uniformLocations[CONST_NUM_UNIFORM_KEY]);
               
         gl.uniform2fv(this._uniformLocations[CONST_NUM_UNIFORM_KEY], this._constNum)
         
-        const matrix = mat4.create();
-        
+        const matrix: mat4 = mat4.create();
+
         const canvasRatio = this._canvas.width / this._canvas.height;
         
         if(canvasRatio < 1){
@@ -54,35 +54,35 @@ export default class JuliaDrawer implements IControlableDrawing{
         } else {
             mat4.scale(matrix, matrix, [1/canvasRatio, 1, 0])
         }
-        mat4.scale(matrix, matrix, [...this._scale.toArray(), 0])
-        mat4.translate(matrix, matrix, [...this._position.toArray(), 0])
+        mat4.scale(matrix, matrix, this._scale.toFloatArray(1))
+        mat4.translate(matrix, matrix, this._position.toFloatArray(1))
 
         gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY], false, matrix)
     }
 
-    move(translate: Vector2){        
-        let movement = new Vector2(
+    move(translate: Vector2): void{        
+        const movement = new Vector2(
             (2/this._scale.x / this._canvas.width * translate.x),
             (-2/this._scale.y / this._canvas.height * translate.y)
         );
         this._position = this._position.add(movement);        
     }
 
-    setConst(x: number, y: number){
+    setConst(x: number, y: number): void{
         this._constNum[0] = x;
         this._constNum[1] = y;
     }
 
-    zoom(scaler:number){
+    zoom(scaler:number): void{
         this._scale = this._scale.scale(scaler);
     }
 
-    draw(){
+    draw(): void{
         
         this._drawer.draw();
     }
 
-    resetViewport(){
+    resetViewport(): void{
         this._drawer.resetViewport();
     }
 

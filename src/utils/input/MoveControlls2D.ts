@@ -2,7 +2,7 @@ import Point from "../math/Point";
 
 export default class MoveControls2D {
 
-    private _useMouseInput: boolean = false;
+    private _useMouseInput = false;
     private _elem: HTMLElement;
     private _previousMove: Point | null; 
 
@@ -26,11 +26,11 @@ export default class MoveControls2D {
 
     private registerMouseCallback(): void {
         this._previousMove = null;
-        this._elem.addEventListener('mousedown', e => {
+        this._elem.addEventListener('mousedown', () => {
             this._useMouseInput = true;
         });
 
-        window.addEventListener('mouseup', e => {
+        window.addEventListener('mouseup', () => {
             this._useMouseInput = false;
             this._previousMove = null;
         });
@@ -40,8 +40,8 @@ export default class MoveControls2D {
                 if(this._previousMove == null){
                     this._previousMove = new Point(e.clientX, e.clientY);
                 } else {
-                    let newX = e.clientX - this._previousMove.x;
-                    let newY = e.clientY - this._previousMove.y;
+                    const newX = e.clientX - this._previousMove.x;
+                    const newY = e.clientY - this._previousMove.y;
                     this._previousMove.setPoint(e.clientX, e.clientY);
                     this._onMove(newX, newY)
                     

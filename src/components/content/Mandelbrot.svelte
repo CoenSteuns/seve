@@ -7,7 +7,7 @@
     import Vector2 from "../../utils/math/Vector2";
     import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
 
-    const ZOOM_SPEED: number = 0.2;
+    const ZOOM_SPEED = 0.2;
 
     let mover: MoveControls2D | null = null;
     let zoomer: ZoomInputcontrolls | null = null;

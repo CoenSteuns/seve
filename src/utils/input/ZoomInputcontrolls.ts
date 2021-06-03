@@ -11,15 +11,15 @@ export default class ZoomInputcontrolls {
         this.registerCallbacks();
     }
 
-    public onZoom(callback: (y: number) => void | null) {
+    public onZoom(callback: (y: number) => void | null): void {
         this._onZoom = callback;
     }
 
-    private registerCallbacks() {
+    private registerCallbacks(): void {
         this.registerMousweelCallback()
     }
 
-    private registerMousweelCallback() {
+    private registerMousweelCallback(): void {
         this._elem.addEventListener("wheel", e => {
             if(this._onZoom){
                 this._onZoom(e.deltaY/100)

@@ -1,24 +1,16 @@
 import type NavLink from "./Nav-link";
 
 export default class NavSubject{
-    private _title: string;
-    private _links: NavLink[];
-
-    public get title() {
-        return this._title;
-    }
-
-    public get links() {
-        return this._links;
-    }
+    private title: string;
+    private links: NavLink[];
 
     constructor(title: string){
-        this._title = title;
-        this._links = [];
+        this.title = title;
+        this.links = [];
     }
 
-    public addLinks(... links: NavLink[]){
-        this._links.push(...links);
+    public addLinks(... links: NavLink[]): void{
+        this.links.push(...links);
     }
 
 }

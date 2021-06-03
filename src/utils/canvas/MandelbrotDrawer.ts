@@ -1,11 +1,11 @@
 import fragShader from '../../shaders/mandelbrot_frag.glsl'
 import vertShader from '../../shaders/rect_vertex.glsl'
 import CoordinateRectDrawer from './CoordinateRectDrawer'
-import {mat4} from '../../lib/gl-matrix-min';
+import {mat4} from 'gl-matrix';
 import type { IControlableDrawing } from './interface/IControlableDrawing';
 import Vector2 from '../math/Vector2';
 
-const MATRIX_UNIFORM_KEY: string = "matrix"
+const MATRIX_UNIFORM_KEY = "matrix"
 
 export default class MandelbrotDrawer implements IControlableDrawing{
 
@@ -36,7 +36,7 @@ export default class MandelbrotDrawer implements IControlableDrawing{
         }
     }
 
-    private setUniforms(gl: WebGLRenderingContext, program: WebGLProgram){
+    private setUniforms(gl: WebGLRenderingContext){
         const matrix = mat4.create();
         
         const canvasRatio = this._canvas.width / this._canvas.height;
@@ -46,29 +46,29 @@ export default class MandelbrotDrawer implements IControlableDrawing{
         } else {
             mat4.scale(matrix, matrix, [1/canvasRatio, 1, 0])
         }
-        mat4.scale(matrix, matrix, [...this._scale.toArray(), 0])//maybe add 0
-        mat4.translate(matrix, matrix, [...this._position.toArray(), 0])
+        mat4.scale(matrix, matrix, this._scale.toFloatArray(1))
+        mat4.translate(matrix, matrix, this._position.toFloatArray(1))
         
         gl.uniformMatrix4fv(this._uniformLocations[MATRIX_UNIFORM_KEY] , false, matrix)
     }
 
-    move(translate: Vector2){
-        let movement = new Vector2(
+    move(translate: Vector2): void{
+        const movement = new Vector2(
             (2/this._scale.x / this._canvas.width * translate.x),
             (-2/this._scale.y / this._canvas.height * translate.y)
         );
         this._position = this._position.add(movement);
     }
 
-    zoom(scaler: number){
+    zoom(scaler: number): void{
         this._scale = this._scale.scale(scaler);
     }
 
-    draw(){
+    draw(): void{
         this._drawer.draw();
     }
 
-    resetViewport(){
+    resetViewport(): void{
         this._drawer.resetViewport();
     }
 

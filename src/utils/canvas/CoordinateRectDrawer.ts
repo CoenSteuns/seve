@@ -4,7 +4,7 @@ export default class CoordinateRectDrawer {
     private _gl :WebGLRenderingContext;
     private _positionBuffer: WebGLBuffer;
 
-    private _needsSetup: boolean = false;
+    private _needsSetup = false;
 
     private _vertices: { [name: string]: number[] };
     private _vertexData: number[];
@@ -34,7 +34,7 @@ export default class CoordinateRectDrawer {
 
     }
 
-    _createVertices(maxX: number, minX: number, maxY: number, minY: number) {
+    _createVertices(maxX: number, minX: number, maxY: number, minY: number): void {
         this._vertices = {
             topLeft: [minX, maxY, 0],
             topRight: [maxX, maxY, 0],
@@ -43,7 +43,7 @@ export default class CoordinateRectDrawer {
         }
     }
 
-    _createVertexData() {
+    _createVertexData(): void {
         const {topLeft, topRight, bottomRight, bottomLeft} = this._vertices;
         
         this._vertexData = [
@@ -52,29 +52,29 @@ export default class CoordinateRectDrawer {
         ];
     }
 
-    setVertexShader(shaderSrc: string){
+    setVertexShader(shaderSrc: string): void{
         const {_gl} = this;
         this._vertexShader = _gl.createShader(_gl.VERTEX_SHADER);
         _gl.shaderSource(this._vertexShader, shaderSrc);
         _gl.compileShader(this._vertexShader);
     }
 
-    setFragmentShader(shaderSrc: string){
+    setFragmentShader(shaderSrc: string): void{
         const {_gl} = this;
         this._fragmentShader = _gl.createShader(_gl.FRAGMENT_SHADER);
         _gl.shaderSource(this._fragmentShader, shaderSrc);
         _gl.compileShader(this._fragmentShader);
     }
 
-    onSetUniform (callback: UniformCallback){
+    onSetUniform (callback: UniformCallback): void{
         this._onUniforms = callback
     }
 
-    onSetUniformKey(callback: UniformCallback){
+    onSetUniformKey(callback: UniformCallback): void{
         this._onUniformKeys = callback
     }
 
-    draw(){
+    draw(): void{
 
         if(this._needsSetup){
             this.redraw();
@@ -107,14 +107,14 @@ export default class CoordinateRectDrawer {
         _gl.drawArrays(_gl.TRIANGLES, 0, this._vertexData.length/3);
     }
 
-    redraw(){
+    redraw(): void{
         if(this._onUniforms)
             this._onUniforms(this._gl, this._program); 
 
         this._gl.drawArrays(this._gl.TRIANGLES, 0, this._vertexData.length/3);
     }
 
-    resetViewport = () =>{
+    resetViewport = (): void =>{
         this._needsSetup = false;
         this._gl.viewport(0, 0, this._gl.canvas.width, this._gl.canvas.height);
     }

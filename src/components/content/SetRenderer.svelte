@@ -4,12 +4,12 @@
 
     export let drawerFactory: (canvas: HTMLCanvasElement) => IControlableDrawing;
 
-    export let onClick: (e: MouseEvent) => void = (e) => {};
+    export let onClick: (e: MouseEvent) => void | null = null;
 
     let canvas: HTMLCanvasElement;
 
-    let width: number = 500;
-    let height: number = 500;
+    let width = 500;
+    let height = 500;
 
     let drawer: IControlableDrawing = null;
 
@@ -31,7 +31,8 @@
         await tick();
         drawer.resetViewport();
         drawer.draw();
-        canvas.addEventListener('click', onClick);
+        if(onClick)
+            canvas.addEventListener('click', onClick);
     });
 </script>
 
