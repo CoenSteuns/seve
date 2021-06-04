@@ -6,7 +6,7 @@
     import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls";
     import MandelbrotControls from "../controls/Mandelbrot-controls.svelte";
     import Vector2 from "../../utils/math/Vector2";
-    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
+    import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
 
     let mover: MoveControls2D;
     let zoomer: ZoomInputcontrolls;
@@ -15,7 +15,7 @@
 
     const zoomspeed = 0.2;
 
-    function createDrawer(elem: HTMLCanvasElement): IControlableDrawing {
+    function createDrawer(elem: HTMLCanvasElement): IDrawable {
         mover = new MoveControls2D(elem);
         zoomer = new ZoomInputcontrolls(elem);
         mover.onMove(move);
@@ -38,7 +38,7 @@
 
     function selectConstant(x: number, y: number): void {
         let translatedX = 2 / 300 * x - 1.5;//.5 for the .5 position offset in the mandelbrot drawer
-        let translatedY = -2 / 300 * y + 1;
+        let translatedY = -2 / 300 * y + 1;//TODO: get all the numbers here from variables (-2 and +1 from juliadrawer & and 300 by giving a width to the mandelbrot controls)
         
         julia.setConst(translatedX, translatedY);
         julia.draw();

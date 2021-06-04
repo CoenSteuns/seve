@@ -5,7 +5,7 @@
     import SetRenderer from "./SetRenderer.svelte";
     import ZoomInputcontrolls from "../../utils/input/ZoomInputcontrolls"
     import Vector2 from "../../utils/math/Vector2";
-    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
+import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
 
     const ZOOM_SPEED = 0.2;
 
@@ -14,7 +14,7 @@
 
     let mandelbrot: MandelbrotDrawer;
 
-    function createMandelbrotDrawer(canvas: HTMLCanvasElement): IControlableDrawing {
+    function createMandelbrotDrawer(canvas: HTMLCanvasElement): IDrawable {
         mover = new MoveControls2D(canvas);
         zoomer = new ZoomInputcontrolls(canvas);
         mover.onMove(move)

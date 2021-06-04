@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount, afterUpdate, tick, onDestroy } from "svelte";
     import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
+import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
 
-    export let drawerFactory: (canvas: HTMLCanvasElement) => IControlableDrawing;
-
+    export let drawerFactory: (canvas: HTMLCanvasElement) => IDrawable;
     export let onClick: (e: MouseEvent) => void | null = null;
 
     let canvas: HTMLCanvasElement;
@@ -11,7 +11,7 @@
     let width = 500;
     let height = 500;
 
-    let drawer: IControlableDrawing = null;
+    let drawer: IDrawable = null;
 
     function resizeCanvas(): void{
         width = canvas.offsetWidth;
