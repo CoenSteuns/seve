@@ -4,6 +4,9 @@
     import MandelbrotDrawer from "../../utils/canvas/MandelbrotDrawer";
     import SetRenderer from "../content/SetRenderer.svelte";
 
+    export let width = 300;
+    export let height = 300;
+
     export let onPositionSelected: (x: number, y: number) => void;
 
     function onClickers(e: MouseEvent) : void{
@@ -15,15 +18,15 @@
     }
 </script>
 
-<div>
+<div style="--width: {width}px; --height: {height}px;">
     <SetRenderer drawerFactory={createMandelbrotDrawer} onClick={onClickers} />
 </div>
 
 <style>
     div{
         position: absolute;
-        width: 300px;
-        height: 300px;
+        width: var(--width);
+        height: var(--height);
         bottom: 10px;
         left: 10px;
 

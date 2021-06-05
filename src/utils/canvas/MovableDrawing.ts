@@ -1,5 +1,5 @@
 import Matrix4 from "../math/Matrix4";
-import type Rect from "../math/Rect";
+import Rect from "../math/Rect";
 import Vector2 from "../math/Vector2";
 import RatioScaler from "../scaling/RatioScaler";
 import CoordinateRectDrawer from "./CoordinateRectDrawer";
@@ -15,11 +15,13 @@ export default class MovableDrawing implements IControlableDrawing {
     protected _position: Vector2;
     protected _scale: Vector2;
 
+    private _size: Rect;
+
     private _uniformLocations: {[name: string]: WebGLUniformLocation}
 
     constructor(canvas: HTMLCanvasElement, size: Rect, src: ShaderProgramSource){
         this._canvas = canvas;
-
+        this._size = size
         const minPoint = size.getMinPoint();
         const maxPoint = size.getMaxPoint();
         
@@ -32,6 +34,10 @@ export default class MovableDrawing implements IControlableDrawing {
 
         this._drawer.onSetUniformKey(this.setUniformsKey.bind(this))
         this._drawer.onSetUniform(this.setUniforms.bind(this))
+    }
+
+    public getSize(): Rect{
+        return Object.assign(new Rect(new Vector2(0, 0), 0 ,0), this._size)
     }
 
     protected setUniformsKey(gl: WebGLRenderingContext, program: WebGLProgram): void{

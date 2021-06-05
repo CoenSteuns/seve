@@ -7,19 +7,24 @@
     import MandelbrotControls from "../controls/Mandelbrot-controls.svelte";
     import Vector2 from "../../utils/math/Vector2";
     import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
+import DrawingController from "../controls/DrawingController.svelte";
+
+    const MANDELBROT_CONTROL_SIZE = 300;
+    const ZOOM_SPEED = 0.2;
+    const UI_MOVE_SPEED = 50;
 
     let mover: MoveControls2D;
     let zoomer: ZoomInputcontrolls;
 
     let julia: JuliaDrawer;
 
-    const zoomspeed = 0.2;
+
 
     function createDrawer(elem: HTMLCanvasElement): IDrawable {
         mover = new MoveControls2D(elem);
         zoomer = new ZoomInputcontrolls(elem);
         mover.onMove(move);
-        zoomer.onZoom((y) => zoom(1 - zoomspeed * y));
+        zoomer.onZoom((y) => zoom(1 - ZOOM_SPEED * y));
 
         julia = new JuliaDrawer(elem);
         return julia;
@@ -37,8 +42,10 @@
     }
 
     function selectConstant(x: number, y: number): void {
-        let translatedX = 2 / 300 * x - 1.5;//.5 for the .5 position offset in the mandelbrot drawer
-        let translatedY = -2 / 300 * y + 1;//TODO: get all the numbers here from variables (-2 and +1 from juliadrawer & and 300 by giving a width to the mandelbrot controls)
+        let drawerSize = julia.getSize();
+        
+        let translatedX = drawerSize.width/2 / MANDELBROT_CONTROL_SIZE * x - drawerSize.width/4 - 0.5;//.5 for the .5 position offset in the mandelbrot drawer
+        let translatedY = -drawerSize.height/2 / MANDELBROT_CONTROL_SIZE * y + drawerSize.height/4;
         
         julia.setConst(translatedX, translatedY);
         julia.draw();
@@ -48,12 +55,12 @@
 <div>
     <SetRenderer drawerFactory={createDrawer} />
     <UIControls
-        onUp={() => move(0, 50)}
-        onDown={() => move(0, -50)}
-        onLeft={() => move(50, 0)}
-        onRight={() => move(-50, 0)}
-        onZoomIn={() => zoom(1.2)}
-        onZoomOut={() => zoom(0.8)}
+        onUp={() => move(0, ZOOM_SPEED)}
+        onDown={() => move(0, -ZOOM_SPEED)}
+        onLeft={() => move(ZOOM_SPEED, 0)}
+        onRight={() => move(-ZOOM_SPEED, 0)}
+        onZoomIn={() => zoom(1 + UI_MOVE_SPEED)}
+        onZoomOut={() => zoom(1 - UI_MOVE_SPEED)}
     />
 
     <MandelbrotControls onPositionSelected={selectConstant} />
