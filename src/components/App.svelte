@@ -12,7 +12,7 @@
     const fractals2D: NavSubject = new NavSubject('2D Fractals');
     fractals2D.addLinks(
         new NavLink("Mandelbrot Set", "Mandelbrot"),
-        new NavLink("Julias Set", "Julia")
+        new NavLink("Julia Set", "Julia")
     );
 
     navData.push(fractals2D);
