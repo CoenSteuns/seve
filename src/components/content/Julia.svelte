@@ -7,7 +7,6 @@
     import MandelbrotControls from "../controls/Mandelbrot-controls.svelte";
     import Vector2 from "../../utils/math/Vector2";
     import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
-import DrawingController from "../controls/DrawingController.svelte";
 
     const MANDELBROT_CONTROL_SIZE = 300;
     const ZOOM_SPEED = 0.2;

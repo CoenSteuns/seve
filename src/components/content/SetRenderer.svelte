@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount, afterUpdate, tick, onDestroy } from "svelte";
-    import type { IControlableDrawing } from "../../utils/canvas/interface/IControlableDrawing";
-import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
+    import type { IDrawable } from "../../utils/canvas/interface/IDrawable";
 
     export let drawerFactory: (canvas: HTMLCanvasElement) => IDrawable;
     export let onClick: (e: MouseEvent) => void | null = null;
