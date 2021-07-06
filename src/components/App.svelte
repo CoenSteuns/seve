@@ -20,10 +20,14 @@
 
 <Router>
     <Nav title="Seve" data={navData} />
+    
     <Content>
         <Route primary={false} path="Mandelbrot"><Mandelbrot /></Route>
         <Route primary={false} path="Julia"><Julia /></Route>
+
+        <Route path="/" ><Mandelbrot /></Route>
     </Content>
+    
 </Router>
 
 <style>
