@@ -28,11 +28,13 @@ export default class MoveControls2D {
         this._previousMove = null;
         this._elem.addEventListener('mousedown', () => {
             this._useMouseInput = true;
+            document.body.style.userSelect = 'none'
         });
 
         window.addEventListener('mouseup', () => {
             this._useMouseInput = false;
             this._previousMove = null;
+            document.body.style.userSelect = 'auto'
         });
 
         this._elem.addEventListener('mousemove', e => {
