@@ -49,6 +49,8 @@ export default class MovableDrawing implements IControlableDrawing {
     protected setUniforms(gl: WebGLRenderingContext): void{
         const matrix = new Matrix4()
         const canvasScale = new RatioScaler(this._canvas.width, this._canvas.height).getVector2Scaler();
+        console.log(canvasScale);
+        
         matrix.scale(canvasScale.toGlVec3());
         matrix.scale(this._scale.toGlVec3(1));
         matrix.translate(this._position.toGlVec3(0))
@@ -56,9 +58,10 @@ export default class MovableDrawing implements IControlableDrawing {
     }
 
     public move(translate: Vector2): void{
+        const canvasScale = new RatioScaler(this._canvas.width, this._canvas.height).getVector2Scaler();
         const movement = new Vector2(
-            (2/this._scale.x / this._canvas.width * translate.x),
-            (-2/this._scale.y / this._canvas.height * translate.y)
+            (2/this._scale.x / this._canvas.width * translate.x) * (1- canvasScale.x + 1),
+            (-2/this._scale.y / this._canvas.height * translate.y)  * (1 - canvasScale.y + 1)
         );
         this._position.add(movement);
     }
