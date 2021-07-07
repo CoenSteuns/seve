@@ -49,7 +49,6 @@ export default class MovableDrawing implements IControlableDrawing {
     protected setUniforms(gl: WebGLRenderingContext): void{
         const matrix = new Matrix4()
         const canvasScale = new RatioScaler(this._canvas.width, this._canvas.height).getVector2Scaler();
-        console.log(canvasScale);
         
         matrix.scale(canvasScale.toGlVec3());
         matrix.scale(this._scale.toGlVec3(1));
